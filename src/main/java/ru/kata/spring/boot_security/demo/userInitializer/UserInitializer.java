@@ -26,13 +26,13 @@ public class UserInitializer {
         this.roleRepository = roleRepository;
     }
 
-    @PostConstruct
-    public void userInitializer() {
-        User user = new User();
-        user.setUsername("admin");
-        user.setPassword(passwordEncoder.encode("admin"));
-        Role adminRole = roleRepository.findById(2L).orElseThrow();
-        user.setRoles(new HashSet<>(Arrays.asList(adminRole)));
-        userRepository.save(user);
-    }
+//    @PostConstruct
+//    public void userInitializer() {
+//        User user = new User();
+//        user.setUsername("admin");
+//        user.setPassword(passwordEncoder.encode("admin"));
+//        Role adminRole = roleRepository.findById(2L).orElseThrow();
+//        user.setRoles(new HashSet<>(Arrays.asList(adminRole)));
+//        userRepository.save(user);
+//    }
 }

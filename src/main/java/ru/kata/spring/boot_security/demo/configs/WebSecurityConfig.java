@@ -3,6 +3,7 @@ package ru.kata.spring.boot_security.demo.configs;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -11,8 +12,11 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.RequestMethod;
 import ru.kata.spring.boot_security.demo.services.MyUserDetailService;
 
+@CrossOrigin(methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PATCH, RequestMethod.DELETE})
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
@@ -29,13 +33,19 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.csrf().disable()
+        http
+                .csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/", "/index").permitAll()
-                .antMatchers("/admin/**").hasRole("ADMIN")
-                .antMatchers("/user").hasAnyRole("ADMIN", "USER")
+                .antMatchers("api/**").permitAll()
+//                .antMatchers("/api/**").hasAuthority("ADMIN")
+//                .antMatchers("/api/**").hasAnyAuthority("ADMIN", "USER")
+//                .antMatchers(HttpMethod.POST, "/api/users").hasRole("ADMIN")
+//                .antMatchers("/", "/index").permitAll()
+//                .antMatchers("/admin/**").hasAnyAuthority("ADMIN", "USER")
                 .and()
-                .formLogin().successHandler(successUserHandler)
+                .formLogin().loginPage("/login").loginProcessingUrl("/process_login")
+                .failureUrl("/login?error")
+                .successHandler(successUserHandler)
                 .permitAll()
                 .and()
                 .logout()

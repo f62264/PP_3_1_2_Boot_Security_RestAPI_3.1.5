@@ -1,22 +1,23 @@
 package ru.kata.spring.boot_security.demo.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import ru.kata.spring.boot_security.demo.models.Role;
 import ru.kata.spring.boot_security.demo.models.User;
 import ru.kata.spring.boot_security.demo.repositories.RoleRepository;
 import ru.kata.spring.boot_security.demo.services.UserService;
 
-import javax.validation.Valid;
-import java.security.Principal;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Controller
 public class UserController {
@@ -30,56 +31,42 @@ public class UserController {
         this.roleRepository = roleRepository;
     }
 
-
-    @GetMapping("/user")
-    public String pageForAuthenticatedUsers(Principal principal, Model model) {
-        User user = userService.findByUsername(principal.getName());
-        model.addAttribute("user", user);
-        return "user";
+    @GetMapping("/login")
+    public String liginPage() {
+        return "login";
     }
 
     @GetMapping("/admin/users")
-    public String findAll(Model model) {
+    public String findAll(Model model, Authentication authentication) {
         List<User> users = userService.findAll();
+        User user = userService.findByUsername(authentication.getName());
+        model.addAttribute("user", user);
+        model.addAttribute("authentication", authentication);
         model.addAttribute("users", users);
-        return "user-list";
-    }
-
-    @GetMapping("/admin/user-create")
-    public String createUserForm(@ModelAttribute("user") User user, Model model) {
         model.addAttribute("roles", roleRepository.findAll());
-        return "user-create";
+        return "user-list-bs";
     }
 
-    @PostMapping("/admin/user-create")
-    public String createUser(@ModelAttribute("user") @Valid User user, BindingResult bindingResult) {
-        if (bindingResult.hasErrors()) {
-            return "user-create";
-        }
+    @PostMapping("/admin/addUser")
+    public String createUser(@ModelAttribute("user") User user, @RequestParam("listRoles") ArrayList<Long> roles) {
+        Set<Role> userRoles = new HashSet<>(roleRepository.findAllById(roles));
+        user.setRoles(userRoles);
         userService.saveUser(user);
         return "redirect:/admin/users";
     }
 
-    @DeleteMapping("/admin/user-delete/{id}")
+    @PostMapping("/admin/user-delete/{id}")
     public String deleteUser(@PathVariable Long id) {
         userService.deleteById(id);
         return "redirect:/admin/users";
     }
 
-    @GetMapping("/admin/user-update/{id}")
-    public String updateUserForm(@PathVariable Long id, Model model) {
-        User user = userService.findById(id);
-        model.addAttribute("user", user);
-        model.addAttribute("roles", roleRepository.findAll());
-        return "user-update";
-    }
-
-    @PatchMapping("/admin/user-update/{id}")
-    public String update(@ModelAttribute("user") @Valid User user, BindingResult bindingResult) {
-        if (bindingResult.hasErrors()) {
-            return "user-update";
-        }
+    @PostMapping("/admin/user-update/{id}")
+    public String update(@ModelAttribute("user") User user, @RequestParam("EditListRoles") ArrayList<Long> roles) {
+        Set<Role> userRoles = new HashSet<>(roleRepository.findAllById(roles));
+        user.setRoles(userRoles);
         userService.saveUser(user);
         return "redirect:/admin/users";
     }
+
 }

@@ -1,6 +1,9 @@
 package ru.kata.spring.boot_security.demo.models;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import org.hibernate.proxy.HibernateProxy;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -27,6 +30,9 @@ import java.util.Set;
 @Table(name = "users", uniqueConstraints = @UniqueConstraint(columnNames = {"username"}))
 @NamedEntityGraph(name = "User.roles", attributeNodes = @NamedAttributeNode("roles"))
 public class User implements UserDetails {
+
+//    @JsonIgnore
+//    private HibernateProxy hibernateLazyInitializer;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
