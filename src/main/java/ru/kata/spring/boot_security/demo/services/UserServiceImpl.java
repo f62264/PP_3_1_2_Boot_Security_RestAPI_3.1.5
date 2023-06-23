@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import ru.kata.spring.boot_security.demo.models.Role;
 import ru.kata.spring.boot_security.demo.models.User;
 import ru.kata.spring.boot_security.demo.repositories.UserRepository;
+import ru.kata.spring.boot_security.demo.util.UsernameDuplicateException;
 
 import javax.transaction.Transactional;
 import java.util.HashSet;
@@ -38,6 +39,9 @@ public class UserServiceImpl implements UserService {
     @Transactional
     @Override
     public User saveUser(User user) {
+        if (userRepository.existsByUsername(user.getUsername())) {
+            throw new UsernameDuplicateException("Логин уже занят. Пожалуйста, выберите другой логин.");
+        }
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         return userRepository.save(user);
     }

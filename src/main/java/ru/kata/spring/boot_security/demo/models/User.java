@@ -21,6 +21,7 @@ import javax.persistence.NamedAttributeNode;
 import javax.persistence.NamedEntityGraph;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 import java.util.Collection;
@@ -43,6 +44,11 @@ public class User implements UserDetails {
     @NotEmpty(message = "Name can't be empty")
     @Size(min = 2, max = 30, message = "Name size to be between 2 and 30 characters")
     private String username;
+
+    @Column(name = "email")
+    @NotEmpty(message = "Name can't be empty")
+    @Email(message = "Email should be valid")
+    private String email;
 
     @Column(name = "password")
     @NotEmpty(message = "Password can't be empty")
@@ -75,6 +81,14 @@ public class User implements UserDetails {
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public void setPassword(String password) {
