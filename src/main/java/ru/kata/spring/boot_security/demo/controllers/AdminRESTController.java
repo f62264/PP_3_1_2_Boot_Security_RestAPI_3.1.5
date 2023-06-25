@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import ru.kata.spring.boot_security.demo.models.User;
 import ru.kata.spring.boot_security.demo.services.UserService;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -39,7 +40,7 @@ public class AdminRESTController {
     }
 
     @PostMapping("/admin")
-    public ResponseEntity<Void> addNewUser(@RequestBody User user) {
+    public ResponseEntity<Void> addNewUser(@Valid @RequestBody User user) {
         userService.saveUser(user);
         return new ResponseEntity<>(HttpStatus.OK);
     }

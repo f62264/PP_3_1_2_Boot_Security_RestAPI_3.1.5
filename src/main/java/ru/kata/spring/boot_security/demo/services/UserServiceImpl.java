@@ -28,7 +28,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User findById(Long id) {
-        return userRepository.getById(id);
+        return userRepository.findById(id).get();
     }
 
     @Override
@@ -39,6 +39,14 @@ public class UserServiceImpl implements UserService {
     @Transactional
     @Override
     public User saveUser(User user) {
+        User userFromBd = null;
+        if (user.getId() != null) {
+            userFromBd = userRepository.findById(user.getId()).get();
+        }
+        if (userFromBd != null && userFromBd.getUsername().equals(user.getUsername())) {
+            user.setPassword(passwordEncoder.encode(user.getPassword()));
+            return userRepository.save(user);
+        }
         if (userRepository.existsByUsername(user.getUsername())) {
             throw new UsernameDuplicateException("Логин уже занят. Пожалуйста, выберите другой логин.");
         }

@@ -16,7 +16,7 @@
     <!--HEADER-->
     <header class="container-fluid d-flex flex-row align-items-center justify-content-between p-3 bg-dark text-white">
         <a href="#" id="info" class="navbar-brand"></a>
-        <div><a class="text-decoration-none font-weight-bold text-secondary" th:href="@{/logout}">Logout</a></div>
+        <div><a class="text-decoration-none font-weight-bold text-secondary" type="submit" id="logout">Logout</a></div>
     </header>
     <!--NAVBAR система навигации АДМИНИСТРАТОР или ЮЗЕР-->
     <div class="container-fluid">
@@ -81,7 +81,7 @@
 <!--                                    модальное окно Edit-->
 
                                     <div class="modal fade" tabindex="-1" aria-labelledby="EditModalLabel"
-                                         aria-hidden="true" id="ModalEditUser" data-bs-backdrop="static" data-bs-keyboard="true">
+                                         aria-hidden="true" id="ModalEditUser" data-bs-keyboard="true">
                                         <div class="modal-dialog">
                                             <div class="modal-content">
                                                 <div class="modal-header">
@@ -127,6 +127,56 @@
                                         </div>
                                     </div>
 
+<!--                                    модальное окно delete-->
+
+                                    <div class="modal fade" tabindex="-1" aria-labelledby="DeleteModalLabel"
+                                         aria-hidden="true" id="ModalDeleteUser" data-bs-keyboard="true">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h1 class="modal-title fs-5" id="deleteModalLabel">Delete user</h1>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <form id="deleteForm">
+                                                        <div class="modal-body col-md text-center">
+                                                            <br>
+                                                            <label for="idDelete"><b>Id</b></label>
+                                                            <input type="text" class="form-control" id="idDelete" name="idDelete" disabled/>
+                                                            <br>
+
+                                                            <label for="deleteUsername"><b>Username</b></label>
+                                                            <input name="deleteUsername" type="text" class="form-control" id="deleteUsername" disabled/>
+                                                            <br>
+
+                                                            <label for="deleteEmail"><b>Email</b></label>
+                                                            <input name="deleteEmail" type="text" class="form-control" id="deleteEmail" disabled/>
+                                                            <br>
+
+                                                            <label for="deletePassword"><b>Password</b></label>
+                                                            <input name="deletePassword" type="password" class="form-control" id="deletePassword" disabled/>
+                                                            <br>
+
+                                                            <label for="rolesDelete"><b>Role</b></label>
+                                                            <select class="form-select" style="width: 400px;" id="rolesDelete" multiple name="listRoles" size="2">
+                                                                <option selected="selected" value="USER">USER</option>
+                                                                <option value="ADMIN">ADMIN</option>
+                                                            </select>
+                                                            <br>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-secondary"
+                                                                    data-bs-dismiss="modal">Close
+                                                            </button>
+                                                            <button type="submit" class="btn btn-primary" id="modalBtnDelete">Delete</button>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
                                 </div>
 
                                 <!-- панель добавить юзера-->
@@ -146,7 +196,7 @@
                                                                     <h6>Username</h6>
                                                                 </label>
                                                                 <input type="username" class="form-control"
-                                                                       id="username" name="username">
+                                                                       id="username" name="username" required="required">
                                                             </div>
                                                         </div>
                                                     </div>
@@ -158,7 +208,7 @@
                                                                     <h6>Email</h6>
                                                                 </label>
                                                                 <input type="email" class="form-control"
-                                                                       id="emailNewUser" name="email">
+                                                                       id="emailNewUser" name="email" required="required">
                                                             </div>
                                                         </div>
                                                     </div>
@@ -170,7 +220,7 @@
                                                                     <h6>Password</h6>
                                                                 </label>
                                                                 <input type="password" class="form-control"
-                                                                       id="passwordNewUser" name="password">
+                                                                       id="passwordNewUser" name="password" required="required">
                                                             </div>
                                                         </div>
                                                     </div>
