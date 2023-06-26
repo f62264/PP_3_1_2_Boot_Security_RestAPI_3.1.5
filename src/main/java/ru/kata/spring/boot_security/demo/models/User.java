@@ -23,6 +23,7 @@ import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.Collection;
 import java.util.Set;
@@ -31,9 +32,6 @@ import java.util.Set;
 @Table(name = "users", uniqueConstraints = @UniqueConstraint(columnNames = {"username"}))
 @NamedEntityGraph(name = "User.roles", attributeNodes = @NamedAttributeNode("roles"))
 public class User implements UserDetails {
-
-//    @JsonIgnore
-//    private HibernateProxy hibernateLazyInitializer;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -60,7 +58,6 @@ public class User implements UserDetails {
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles;
-
 
     public User() {
     }

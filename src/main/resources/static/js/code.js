@@ -1,11 +1,9 @@
-
 document.addEventListener("DOMContentLoaded", async function verification() {
 
     //получение всех юзеров
 
     const allusers = document.querySelector('#tableUsers tbody')
     const url = 'http://localhost:8080/api/admin'
-
     const getAllUsers = async () => {
         const response = await fetch(url);
         if (response.ok) {
@@ -30,7 +28,9 @@ document.addEventListener("DOMContentLoaded", async function verification() {
             console.error('Ошибка при получении данных:', response.status);
         }
     }
+
     // получение авторизированного юзера
+
     async function getUserHeader() {
         let get = await fetch('api/user')
         if (get.ok) {
@@ -111,12 +111,17 @@ document.addEventListener("DOMContentLoaded", async function verification() {
         let username = addForm.username.value;
         let email = addForm.email.value;
         let password = addForm.password.value;
-
         let user = {
             username: username,
             email: email,
             password: password,
             roles: getRole()
+        }
+
+        if (username.trim() === '' || email.trim() === '' || password.trim() === '') {
+            // Если одно из полей пустое, выполните соответствующие действия
+            alert('Заполните все поля');
+            return;
         }
 
         let addUser = await fetch('api/admin',
@@ -135,10 +140,14 @@ document.addEventListener("DOMContentLoaded", async function verification() {
             addForm.find('#emailNewUser').val('');
             addForm.find('#passwordNewUser').val('');
             addForm.find(getRole()).val('');
+        } else {
+            alert('Такой пользователь уже существует')
         }
+
     })
 
     //редактирование юзера
+
     const on = (element, event, selector, handler) => {
         element.addEventListener(event, async e => {
             if (e.target.closest(selector)) {
@@ -195,6 +204,11 @@ document.addEventListener("DOMContentLoaded", async function verification() {
             roles: getEditRole()
         }
 
+        if (username.trim() === '' || email.trim() === '' || password.trim() === '') {
+            alert('Заполните все поля');
+            return;
+        }
+
         let update = await fetch(url, {
             method: 'PUT',
             headers: {
@@ -206,10 +220,13 @@ document.addEventListener("DOMContentLoaded", async function verification() {
         if (update.ok) {
             await getAllUsers();
             ModalEditUser.hide();
+        } else {
+            alert('Такой пользователь уже существует')
         }
     })
 
     //удаление юзера
+
     on(document, 'click', '#getDeleteModal', async e => {
         const row = e.target.parentNode.parentNode
         idForm = row.children[0].innerHTML
@@ -244,6 +261,7 @@ document.addEventListener("DOMContentLoaded", async function verification() {
     })
 
     //таблица юзера
+
     async function getUser() {
         let get = await fetch('api/user')
         if (get.ok) {
@@ -268,9 +286,9 @@ document.addEventListener("DOMContentLoaded", async function verification() {
     })
 
     //logout
+
     document.getElementById('logout').addEventListener('click', async function () {
         window.location.href = '/logout'
     })
-
 })
 

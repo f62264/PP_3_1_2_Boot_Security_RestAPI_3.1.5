@@ -20,11 +20,9 @@ public class Role implements GrantedAuthority {
 
     @Column(name = "roles")
     private String name;
-
     public Role(String roles) {
         this.name = name;
     }
-
     public Role() {
 
     }

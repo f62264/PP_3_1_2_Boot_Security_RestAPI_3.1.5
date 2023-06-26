@@ -3,19 +3,21 @@ package ru.kata.spring.boot_security.demo.services;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import ru.kata.spring.boot_security.demo.models.Role;
+import org.springframework.validation.Validator;
+import org.springframework.validation.annotation.Validated;
 import ru.kata.spring.boot_security.demo.models.User;
 import ru.kata.spring.boot_security.demo.repositories.UserRepository;
 import ru.kata.spring.boot_security.demo.util.UsernameDuplicateException;
 
 import javax.transaction.Transactional;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 @Service
+@Validated
 public class UserServiceImpl implements UserService {
 
+    @Autowired
+    private Validator validator;
     private final UserRepository userRepository;
 
     private final PasswordEncoder passwordEncoder;
